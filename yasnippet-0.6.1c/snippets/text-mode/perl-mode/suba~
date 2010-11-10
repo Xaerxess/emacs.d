@@ -1,6 +1,0 @@
-#name : suba { ... }
-# --
-sub {
-    my ( ${1:function_args} ) = @_;
-    $0
-},

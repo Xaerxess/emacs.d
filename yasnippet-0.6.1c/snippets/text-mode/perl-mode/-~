@@ -1,4 +1,0 @@
-#name : ->{'(...)'}
-#binding: (require 'perl-mode) (perl-mode-map . "M--")
-# --
-->{'$1'}$0
