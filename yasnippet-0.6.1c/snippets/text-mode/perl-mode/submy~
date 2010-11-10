@@ -1,0 +1,6 @@
+#name : submy { ... }
+# --
+my ${1:function_name} sub {
+    my ( ${2:function_args} ) = @_;
+    $0
+};

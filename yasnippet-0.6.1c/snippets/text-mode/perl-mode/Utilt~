@@ -1,0 +1,3 @@
+#name : Util::trace_dump(...)
+# --
+Util::trace_dump('\$${1:var_name}', \$$1);
