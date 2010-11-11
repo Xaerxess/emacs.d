@@ -16,10 +16,18 @@
 
 (setq inhibit-splash-screen t)
 (setq scroll-step 2)
+(setq c-default-style "bsd"
+      c-basic-offset 4)
 (tool-bar-mode -1)
+(set-face-attribute 'default nil :height 90)
 
 ;; C-c, C-v etc.
 (cua-mode t)
+
+;; php-mode for Emacs23
+(autoload 'php-mode "php-mode" "Major mode for editing php code." t)
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
 ;; required by one of my snippets
 (require 'perl-mode)
