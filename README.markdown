@@ -1,3 +1,3 @@
 # My .emacs.d
 
-Initial commit
+I created this repository to keep my .emacs.d synchronized between computers, but feel free to pull ;)
