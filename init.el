@@ -7,7 +7,10 @@
  '(max-lisp-eval-depth 50000)
  '(max-specpdl-size 50000)
  '(safe-local-variable-values '((buffer-file-coding-system . windows-1250-unix) (buffer-file-coding-system . utf-8-unix))))
-(custom-set-faces)
+(custom-set-faces
+ '(diff-added   ((t (:foreground "DodgerBlue" :bold t))) 'now)
+ '(diff-removed ((t (:foreground "FireBrick"  :bold t))) 'now)
+)
 
 ;; set grep-command under Windows
 (if (and (eq system-type 'windows-nt) (file-exists-p "C:/gnuwin32/bin/grep.exe"))
@@ -44,9 +47,19 @@
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
+;; sql-indent
+(eval-after-load "sql"
+  (load-library "sql-indent"))
+
 ;; zencoding
 (require 'zencoding-mode)
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
+
+;; markdown
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+   (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
 ;; Better auto completion for buffer switching and command execution.
 ;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match. 
@@ -88,6 +101,7 @@
                   " -r "
                   "\"" (replace-regexp-in-string "\"" "\\\\\"" query) "\""
                   (concat " --exclude=" dir "cgi-bin/hittest.pl ")
+                  (concat " --exclude=" dir "modules/Configuration.pm ")
                   (mapconcat (lambda(sub) (concat dir sub))
                              '("cgi-bin/*.pl"
                                "htdocs/*.html"
@@ -97,6 +111,21 @@
                                "tools/*.*")
                              " ")))))
 (global-set-key (kbd "C-M-g") 'do-grep)
+
+(defun do-grep-global (query)
+  "Run the grep command from the current project root."
+  (interactive "MGrep query: ")
+  (let ((dir (file-name-directory buffer-file-name)))
+    (grep (concat grep-command
+                  " -r "
+                  "\"" (replace-regexp-in-string "\"" "\\\\\"" query) "\" "
+                  (mapconcat (lambda(sub) (concat dir sub))
+                             '("../class/*.php"
+                               "../includes/*.php"
+                               "../templates/*.tpl"
+                               "../*.php")
+                             " ")))))
+(global-set-key (kbd "C-M-S-G") 'do-grep-global)
 
 (defun bf-pretty-print-xml-region (begin end)
   "Pretty format XML markup in region. You need to have nxml-mode
