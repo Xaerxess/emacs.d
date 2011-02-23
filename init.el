@@ -2,15 +2,22 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/yasnippet-0.6.1c/"))
 
 (custom-set-variables
- '(grep-highlight-matches 'always)
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(grep-highlight-matches (quote always))
  '(indent-tabs-mode nil)
  '(max-lisp-eval-depth 50000)
  '(max-specpdl-size 50000)
- '(safe-local-variable-values '((buffer-file-coding-system . windows-1250-unix) (buffer-file-coding-system . utf-8-unix))))
+ '(safe-local-variable-values (quote ((buffer-file-coding-system . utf-8-auto) (buffer-file-coding-system . utf-8-dos) (buffer-file-coding-system . windows-1250-unix) (buffer-file-coding-system . utf-8-unix)))))
 (custom-set-faces
- '(diff-added   ((t (:foreground "DodgerBlue" :bold t))) 'now)
- '(diff-removed ((t (:foreground "FireBrick"  :bold t))) 'now)
-)
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(diff-added ((t (:foreground "DodgerBlue" :bold t))))
+ '(diff-removed ((t (:foreground "FireBrick" :bold t)))))
 
 ;; set grep-command under Windows
 (if (and (eq system-type 'windows-nt) (file-exists-p "C:/gnuwin32/bin/grep.exe"))
@@ -60,6 +67,9 @@
    "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
    (cons '("\\.text" . markdown-mode) auto-mode-alist))
+
+;; switch vc-diff to unified diff 
+(setf vc-diff-switches "-u")
 
 ;; Better auto completion for buffer switching and command execution.
 ;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match. 
@@ -141,3 +151,31 @@ by using nxml's indentation rules."
         (backward-char) (insert "\n"))
       (indent-region begin end))
     (message "Ah, much better!"))
+
+;; toggle windows vertically / horizontally
+(defun toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+	     (next-win-buffer (window-buffer (next-window)))
+	     (this-win-edges (window-edges (selected-window)))
+	     (next-win-edges (window-edges (next-window)))
+	     (this-win-2nd (not (and (<= (car this-win-edges)
+					 (car next-win-edges))
+				     (<= (cadr this-win-edges)
+					 (cadr next-win-edges)))))
+	     (splitter
+	      (if (= (car this-win-edges)
+		     (car (window-edges (next-window))))
+		  'split-window-horizontally
+		'split-window-vertically)))
+	(delete-other-windows)
+	(let ((first-win (selected-window)))
+	  (funcall splitter)
+	  (if this-win-2nd (other-window 1))
+	  (set-window-buffer (selected-window) this-win-buffer)
+	  (set-window-buffer (next-window) next-win-buffer)
+	  (select-window first-win)
+	  (if this-win-2nd (other-window 1))))))
+
+(global-set-key (kbd "C-x 4") 'toggle-window-split)
