@@ -71,6 +71,9 @@
 ;; switch vc-diff to unified diff 
 (setf vc-diff-switches "-u")
 
+;; remember password in tramp session
+(setq password-cache-expiry nil)
+
 ;; Better auto completion for buffer switching and command execution.
 ;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match. 
 (require 'ido)
