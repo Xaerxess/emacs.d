@@ -1116,9 +1116,9 @@ current `tags-file-name'."
           (beginning-of-line) (end-of-line)
           (1 font-lock-constant-face)))
 
-   ;; treat 'print' as keyword only when not used like a function name
-   '("\\<print\\s-*(" . php-default-face)
-   '("\\<print\\>" . font-lock-keyword-face)
+   ;; treat 'print' and 'clone' as keyword only when not used like a function name
+   '("\\<\\(print\\|clone\\)\\s-*(" . php-default-face)
+   '("\\<\\(print\\|clone\\)\\>" . font-lock-keyword-face)
 
    ;; Fontify PHP tag
    (cons php-tags-key font-lock-preprocessor-face)
@@ -1140,9 +1140,7 @@ current `tags-file-name'."
       (1 font-lock-keyword-face) (2 font-lock-type-face nil t))
     ;; handle several words specially, to include following word,
     ;; thereby excluding it from unknown-symbol checks later
-    ;; FIX to handle implementing multiple
-    ;; currently breaks on "class Foo implements Bar, Baz"
-    '("\\<\\(new\\|extends\\|implements\\)\\s-+\\$?\\(\\sw+\\)"
+    '("\\<\\(new\\|extends\\|implements\\|instanceof\\)\\s-+\\$?\\(\\sw+\\)"
       (1 font-lock-keyword-face) (2 font-lock-type-face))
 
     ;; function declaration
