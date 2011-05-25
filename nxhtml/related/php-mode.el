@@ -167,6 +167,8 @@ Turning this on will open it whenever `php-mode' is loaded."
     "^\\s-*\\(?:\\(?:abstract\\|final\\)\\s-+\\)?public\\s-+\\(?:static\\s-+\\)?function\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*(" 1)
    ("Classes"
     "^\\s-*class\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*" 1)
+   ("Namespaces"
+    "^\\s-*namespace\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*" 1)
    ("All Functions"
     "^\\s-*\\(?:\\(?:abstract\\|final\\|private\\|protected\\|public\\|static\\)\\s-+\\)*function\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*(" 1)
    )
@@ -705,7 +707,7 @@ current `tags-file-name'."
     (regexp-opt
      '(;; core constants
        "__LINE__" "__FILE__"
-       "__FUNCTION__" "__CLASS__" "__METHOD__"
+       "__FUNCTION__" "__CLASS__" "__METHOD__" "__NAMESPACE__"
        "PHP_OS" "PHP_VERSION"
        "TRUE" "FALSE" "NULL"
        "E_ERROR" "E_NOTICE" "E_PARSE" "E_WARNING" "E_ALL" "E_STRICT"
@@ -1074,7 +1076,7 @@ current `tags-file-name'."
        "extends" "for" "foreach" "global" "if" "include" "include_once"
        "next" "or" "require" "require_once" "return" "static" "switch"
        "then" "var" "while" "xor" "throw" "catch" "try"
-       "instanceof" "catch all" "finally")))
+       "clone" "catch all" "finally")))
   "PHP keywords.")
 
 (defconst php-identifier
@@ -1116,9 +1118,9 @@ current `tags-file-name'."
           (beginning-of-line) (end-of-line)
           (1 font-lock-constant-face)))
 
-   ;; treat 'print' and 'clone' as keyword only when not used like a function name
-   '("\\<\\(print\\|clone\\)\\s-*(" . php-default-face)
-   '("\\<\\(print\\|clone\\)\\>" . font-lock-keyword-face)
+   ;; treat 'print' as keyword only when not used like a function name
+   '("\\<print\\s-*(" . php-default-face)
+   '("\\<print\\>" . font-lock-keyword-face)
 
    ;; Fontify PHP tag
    (cons php-tags-key font-lock-preprocessor-face)
@@ -1135,18 +1137,42 @@ current `tags-file-name'."
    php-font-lock-keywords-1
    (list
 
+    ;; namespace/use declaration
+    '("\\<\\(namespace\\|use\\)\\s-+\\(?:\\$\\|\\\\\\)?\\(\\sw+\\)"
+      (1 font-lock-keyword-face) (2 font-lock-type-face))
+
+    ;; as alias
+    '("\\<\\(as\\)\\s-+\\(\\sw+\\)"
+      (1 font-lock-keyword-face) (2 font-lock-type-face))
+
     ;; class declaration
     '("\\<\\(class\\|interface\\)\\s-+\\(\\sw+\\)?"
       (1 font-lock-keyword-face) (2 font-lock-type-face nil t))
+
+    ;; implements
+    ;; FIX to handle implementing multiple
+    ;; currently breaks on sixth interface
+    '("\\<\\(implements\\)\\s-+\\(\\sw+\\)?\\s-*,?\\s-*\\(\\sw+\\)?\\s-*,?\\s-*\\(\\sw+\\)?\\s-*,?\\s-*\\(\\sw+\\)?\\s-*,?\\s-*\\(\\sw+\\)?"
+      (1 font-lock-keyword-face)
+      (2 font-lock-type-face nil t)
+      (3 font-lock-type-face nil t)
+      (4 font-lock-type-face nil t)
+      (5 font-lock-type-face nil t)
+      (6 font-lock-type-face nil t))
+
     ;; handle several words specially, to include following word,
     ;; thereby excluding it from unknown-symbol checks later
-    '("\\<\\(new\\|extends\\|implements\\|instanceof\\)\\s-+\\$?\\(\\sw+\\)"
-      (1 font-lock-keyword-face) (2 font-lock-type-face))
+    '("\\<\\(new\\|extends\\|instanceof\\)\\s-+\\(\\$\\|\\\\\\)?\\(\\sw+\\)"
+      (1 font-lock-keyword-face) (3 font-lock-type-face))
 
     ;; function declaration
     '("\\<\\(function\\)\\s-+&?\\(\\sw+\\)\\s-*("
       (1 font-lock-keyword-face)
       (2 font-lock-function-name-face nil t))
+
+    ;; anonymous function declaration
+    '("\\<\\(function\\)\\s-*("
+      (1 font-lock-keyword-face))
 
     ;; class hierarchy
     '("\\<\\(self\\|parent\\)\\>" (1 font-lock-constant-face nil nil))
@@ -1215,6 +1241,7 @@ current `tags-file-name'."
     '("->\\(\\sw+\\)\\s-*(" . (1 php-default-face t t)) ;; ->function_call
     '("\\(\\sw+\\)::\\sw+\\s-*(?" . (1 font-lock-type-face)) ;; class::member
     '("::\\(\\sw+\\>[^(]\\)" . (1 php-default-face)) ;; class::constant
+    '("\\(\\sw*\\)\\\\\\(\\sw+\\)" (1 font-lock-type-face) (2 font-lock-type-face)) ;; \namespace
     '("\\<\\sw+\\s-*[[(]" . php-default-face) ;; word( or word[
     '("\\<[0-9]+" . php-default-face) ;; number (also matches word)
 
