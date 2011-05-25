@@ -113,6 +113,7 @@ order."
   (add-to-list 'auto-mode-alist '("\\.epl\\'"      . embperl-nxhtml-mumamo-mode))
   (add-to-list 'auto-mode-alist '("\\.ghtml\\'"     . genshi-nxhtml-mumamo-mode))
   (add-to-list 'auto-mode-alist '("\\.mhtml\\'"     . mason-nxhtml-mumamo-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\'"      . smarty-html-mumamo-mode))
 
   ;; Add html-mumamo style entry if there is an nxhtml-mumamo style entry.
   (save-match-data
