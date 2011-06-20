@@ -1,6 +1,10 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/yasnippet-0.6.1c/"))
 
+(prefer-coding-system 'utf-8)
+(setq coding-system-for-read 'utf-8-unix)
+(setq coding-system-for-write 'utf-8-unix)
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -48,9 +52,9 @@
 ;; hg
 (require 'mercurial)
 
-;; js2-mode
-(autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; js2-mode - currently testing built-in javascript-mode
+;; (autoload 'js2-mode "js2" nil t)
+;; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; sql-indent
 (eval-after-load "sql"
