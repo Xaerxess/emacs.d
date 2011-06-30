@@ -101,6 +101,7 @@
 ;; enter (RET) mapping
 (dolist (hook (list
                'js2-mode-hook
+               'php-mode-hook
                'perl-mode-hook))
   (add-hook hook
             (function
