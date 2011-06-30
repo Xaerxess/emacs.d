@@ -28,14 +28,27 @@
     (setq grep-command "\"C:/gnuwin32/bin/grep.exe\" -n")
   (setq grep-command "grep -n"))
 
+(global-set-key (kbd "<M-f4>") 'save-buffers-kill-terminal)
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq x-select-enable-clipboard t)      ;; better clipboard under X11
+(global-linum-mode t)                   ;; line numbers
 (setq inhibit-splash-screen t)
-(setq scroll-step 2)
+(setq scroll-step 1)
 (setq c-default-style "bsd"
       c-basic-offset 4)
 (tool-bar-mode -1)
 (set-face-attribute 'default nil :height 90)
 
-;; C-c, C-v etc.
+;; Navigate windows with M-<arrows>
+(windmove-default-keybindings 'meta)
+(setq windmove-wrap-around t)
+
+;; whenever an external process changes a file underneath emacs, and there
+;; was no unsaved changes in the corresponding buffer, just revert its
+;; content to reflect what's on-disk.
+(global-auto-revert-mode 1)
+
+;; CUA mode: C-c, C-v etc.
 (cua-mode t)
 
 ;; required by one of my snippets
@@ -79,10 +92,11 @@
 ;; Better auto completion for buffer switching and command execution.
 ;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match. 
 (require 'ido)
-;(ido-mode 1)
 (ido-mode 'buffer)
 (setq ido-enable-flex-matching t)
 (put 'narrow-to-region 'disabled nil)
+(global-set-key (kbd "C-x C-c") 'ido-switch-buffer) ;; save-buffers-kill-terminal remapped to <M-f4>
+(global-set-key (kbd "C-x C-b") 'ibuffer)           ;; override buffer-menu
 
 ;; paren matching
 (require 'mic-paren)
