@@ -23,21 +23,18 @@
  '(diff-added ((t (:foreground "DodgerBlue" :bold t))))
  '(diff-removed ((t (:foreground "FireBrick" :bold t)))))
 
-;; set grep-command under Windows
-(if (and (eq system-type 'windows-nt) (file-exists-p "C:/gnuwin32/bin/grep.exe"))
-    (setq grep-command "\"C:/gnuwin32/bin/grep.exe\" -n")
-  (setq grep-command "grep -n"))
-
-(global-set-key (kbd "<M-f4>") 'save-buffers-kill-terminal)
-(defalias 'yes-or-no-p 'y-or-n-p)
-(setq x-select-enable-clipboard t)      ;; better clipboard under X11
-(global-linum-mode t)                   ;; line numbers
-(setq inhibit-splash-screen t)
+(setq inhibit-splash-screen t)          ;; turn off splash screen
 (setq scroll-step 1)
 (setq c-default-style "bsd"
       c-basic-offset 4)
 (tool-bar-mode -1)
 (set-face-attribute 'default nil :height 90)
+(setq x-select-enable-clipboard t)      ;; better clipboard under X11
+(global-linum-mode t)                   ;; line numbers
+(defalias 'yes-or-no-p 'y-or-n-p)       ;; I'm lazy ;)
+
+;; CUA mode: C-c, C-v etc.
+(cua-mode t)
 
 ;; Navigate windows with M-<arrows>
 (windmove-default-keybindings 'meta)
@@ -47,9 +44,6 @@
 ;; was no unsaved changes in the corresponding buffer, just revert its
 ;; content to reflect what's on-disk.
 (global-auto-revert-mode 1)
-
-;; CUA mode: C-c, C-v etc.
-(cua-mode t)
 
 ;; required by one of my snippets
 (require 'perl-mode)
@@ -64,6 +58,9 @@
 
 ;; hg
 (require 'mercurial)
+
+;; switch vc-diff to unified diff 
+(setf vc-diff-switches "-u")
 
 ;; js2-mode - currently testing built-in javascript-mode
 ;; (autoload 'js2-mode "js2" nil t)
@@ -83,9 +80,6 @@
 (setq auto-mode-alist
    (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
-;; switch vc-diff to unified diff 
-(setf vc-diff-switches "-u")
-
 ;; remember password in tramp session
 (setq password-cache-expiry nil)
 
@@ -95,6 +89,7 @@
 (ido-mode 'buffer)
 (setq ido-enable-flex-matching t)
 (put 'narrow-to-region 'disabled nil)
+(global-set-key (kbd "<M-f4>") 'save-buffers-kill-terminal)
 (global-set-key (kbd "C-x C-c") 'ido-switch-buffer) ;; save-buffers-kill-terminal remapped to <M-f4>
 (global-set-key (kbd "C-x C-b") 'ibuffer)           ;; override buffer-menu
 
@@ -113,13 +108,18 @@
                (define-key (current-local-map) (kbd "<return>")
                  'reindent-then-newline-and-indent)))))
 
-;; C-o 
+;; C-o (occur)
 (define-key isearch-mode-map (kbd "C-o")
   (lambda ()
     (interactive)
     (let ((case-fold-search isearch-case-fold-search))
       (occur (if isearch-regexp isearch-string
                  (regexp-quote isearch-string))))))
+
+;; set grep-command under Windows
+(if (and (eq system-type 'windows-nt) (file-exists-p "C:/gnuwin32/bin/grep.exe"))
+    (setq grep-command "\"C:/gnuwin32/bin/grep.exe\" -n")
+  (setq grep-command "grep -n"))
 
 ;; grep - project LP
 (defun do-grep (query)
@@ -196,5 +196,4 @@ by using nxml's indentation rules."
 	  (set-window-buffer (next-window) next-win-buffer)
 	  (select-window first-win)
 	  (if this-win-2nd (other-window 1))))))
-
 (global-set-key (kbd "C-x 4") 'toggle-window-split)
