@@ -990,7 +990,7 @@ The hyperlinks can be hilighted when point is over them.  Use
 `mlinks-toggle-hilight' to toggle this feature for the current
 buffer.
 
-All keybindings in this mode are by default done under the prefi§x
+All keybindings in this mode are by default done under the prefiÂ§x
 key
 
   C-c RET
@@ -3046,7 +3046,7 @@ For Smarty functions, see PDF or HTML documentation.
 ;;;***
 
 ;;;### (autoloads (php-mode php-file-patterns php) "php-mode" "related/php-mode.el"
-;;;;;;  (19218 45782))
+;;;;;;  (19980 24547))
 ;;; Generated autoloads from related/php-mode.el
 (web-autoload-require 'php-mode 'lp '(nxhtml-download-root-url nil) "related/php-mode" nxhtml-install-dir 'nxhtml-byte-compile-file)
 
@@ -4153,17 +4153,18 @@ Update the table of contents inserted by `html-pagetoc-insert-toc'.
 
 ;;;***
 
-;;;### (autoloads (web-vcs-investigate-elisp-file web-vcs-byte-compile-file
-;;;;;;  web-vcs-message-with-face web-vcs-get-files-from-root web-vcs-log-edit
-;;;;;;  web-vcs-default-download-directory) "web-vcs" "web-vcs.el"
-;;;;;;  (19412 33966))
+;;;### (autoloads (web-vcs-investigate-elisp-file web-vcs-url-copy-file
+;;;;;;  web-vcs-url-retrieve-synch web-vcs-byte-compile-file web-vcs-message-with-face
+;;;;;;  web-vcs-get-files-from-root web-vcs-log-edit web-vcs-default-download-directory)
+;;;;;;  "web-vcs" "web-vcs.el" (19925 6768))
 ;;; Generated autoloads from web-vcs.el
 (web-autoload-require 'web-vcs 'lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir 'nxhtml-byte-compile-file)
 
 
 (nxhtml-autoload 'web-vcs-default-download-directory `(lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir) "\
 Try to find a suitable place.
-Considers site-start.el, site-
+Use the choice in `web-vcs-default-download-directory'.
+If this does not fit fall back to \"~/.emacs.d/\".
 
 \(fn)" nil nil)
 
@@ -4175,13 +4176,13 @@ Open log file.
 (nxhtml-autoload 'web-vcs-get-files-from-root `(lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir) "\
 Download a file tree from VCS system using the web interface.
 Use WEB-VCS entry in variable `web-vcs-links-regexp' to download
-files via http from URL to directory DL-DIR.
+files via http from FULL-URL to directory DL-DIR.
 
-Show URL first and offer to visit the page.  That page will give
-you information about version control system (VCS) system used
-etc.
+Show FULL-URL first and offer to visit the page.  That page will
+give you information about version control system (VCS) system
+used etc.
 
-\(fn WEB-VCS URL DL-DIR)" nil nil)
+\(fn WEB-VCS FULL-URL DL-DIR)" nil nil)
 
 (nxhtml-autoload 'web-vcs-message-with-face `(lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir) "\
 Display a colored message at the bottom of the string.
@@ -4201,6 +4202,24 @@ FILE is set to `buffer-file-name' when called interactively.
 If LOAD
 
 \(fn FILE &optional LOAD EXTRA-LOAD-PATH COMP-DIR)" t nil)
+
+(nxhtml-autoload 'web-vcs-url-retrieve-synch `(lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir) "\
+Retrieve URL, return cons with buffer and http status.
+
+\(fn URL)" nil nil)
+
+(nxhtml-autoload 'web-vcs-url-copy-file `(lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir) "\
+Copy URL to NEWNAME.  Both args must be strings.
+Signals a `file-already-exists' error if file NEWNAME already exists,
+unless a third argument OK-IF-ALREADY-EXISTS is supplied and non-nil.
+A number as third arg means request confirmation if NEWNAME already exists.
+This is what happens in interactive use with M-x.
+Fourth arg KEEP-TIME non-nil means give the new file the same
+last-modified time as the old one.  (This works on only some systems.)
+Fifth arg PRESERVE-UID-GID is ignored.
+A prefix arg makes KEEP-TIME non-nil.
+
+\(fn URL NEWNAME &optional OK-IF-ALREADY-EXISTS KEEP-TIME PRESERVE-UID-GID)" nil nil)
 
 (nxhtml-autoload 'web-vcs-investigate-elisp-file `(lp '(nxhtml-download-root-url nil) "web-vcs" nxhtml-install-dir) "\
 Not documented
@@ -4314,7 +4333,7 @@ accept it or skip it.
 ;;;;;;  "util/fupd.el" "util/idn.el" "util/key-cat.el" "util/mumamo-aspnet.el"
 ;;;;;;  "util/mumamo-trace.el" "util/new-key-seq-widget.el" "util/nxml-mode-os-additions.el"
 ;;;;;;  "util/org-panel.el" "util/rxi.el" "util/useful-commands.el"
-;;;;;;  "web-autoload.el") (19819 36954 331000))
+;;;;;;  "web-autoload.el") (19980 27333 544000))
 
 ;;;***
 
