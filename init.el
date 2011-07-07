@@ -33,6 +33,11 @@
 (global-linum-mode t)                   ;; line numbers
 (defalias 'yes-or-no-p 'y-or-n-p)       ;; I'm lazy ;)
 
+(setq hscroll-margin 4)
+(setq hscroll-step   4)
+(global-set-key (kbd "C-<") (function (lambda () (interactive) (scroll-left 4))))
+(global-set-key (kbd "C->") (function (lambda () (interactive) (scroll-right 4))))
+
 ;; CUA mode: C-c, C-v etc.
 (cua-mode t)
 
