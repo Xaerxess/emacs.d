@@ -75,6 +75,39 @@
 (eval-after-load "sql"
   (load-library "sql-indent"))
 
+;; HTML & CSS hooks
+;; TODO: organize this
+(defvar hexcolour-keywords
+  '(("#[abcdef[:digit:]]\\{6\\}"
+     (0 (put-text-property
+         (match-beginning 0)
+         (match-end 0)
+         'face (list :background 
+                     (match-string-no-properties 0)))))))
+(defun hexcolour-add-to-font-lock ()
+  (font-lock-add-keywords nil hexcolour-keywords))
+(add-hook 'css-mode-hook 'hexcolour-add-to-font-lock)
+
+(defun wrap-text (aa bb)
+  "Wrap strings aa and bb around current word or region."
+  (save-excursion
+    (let (p1 p2 myword)
+      (if (and transient-mark-mode mark-active)
+          (progn (setq p1 (region-beginning)) (setq p2 (region-end)))
+        (progn
+          (skip-chars-backward "-A-Za-z")
+          (setq p1 (point))
+          (skip-chars-forward "-A-Za-z")
+          (setq p2 (point))))
+      (setq myword (buffer-substring-no-properties p1 p2))
+      (goto-char p2) (insert bb)
+      (goto-char p1) (insert aa))))
+(defun wrap-strong ()
+  "Wrap a HTML <strong> tag around current word or region."
+  (interactive)
+  (wrap-text "<strong>" "</strong>"))
+(global-set-key (kbd "<f6>") 'wrap-strong)
+
 ;; zencoding
 (require 'zencoding-mode)
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
