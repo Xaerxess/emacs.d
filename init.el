@@ -141,8 +141,8 @@
                              '("cgi-bin/*.pl"
                                "htdocs/*.html"
                                "htdocs/css/*.css"
+                               "htdocs/scripts/*.js"
                                "modules/*.pm"
-                               "scripts/*.js"
                                "tools/*.*")
                              " ")))))
 (global-set-key (kbd "C-M-g") 'do-grep)
