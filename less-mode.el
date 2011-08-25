@@ -29,7 +29,7 @@
 ;; THE SOFTWARE.
 
 
-(defcustom less-css-indent-level 2 "Number of spacnes to indent inside a block.")
+(defcustom less-css-indent-level 4 "Number of spaces to indent inside a block.")
 
 
 (defvar less-css-mode-hook nil)
@@ -94,8 +94,8 @@
       (while (not (bobp))
         ;; TODO search backwards
         (backward-char)
-        (cond ((looking-at "{") (setq indent-level (+ 1 indent-level)))
-              ((looking-at "}") (setq indent-level (- indent-level 1)))))
+        (cond ((looking-at "{") (setq indent-level (1+ indent-level)))
+              ((looking-at "}") (setq indent-level (1- indent-level)))))
       indent-level)))
 
 
@@ -111,6 +111,6 @@
   (setq mode-name "Less (CSS)")
   (run-hooks 'less-css-mode-hook))
 
-(add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))
+(add-to-list 'auto-mode-alist '("\\.less\\'" . css-mode)) ;; temporarly use css-mode for *.less files
 
 (provide 'less-mode)
