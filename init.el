@@ -108,6 +108,9 @@
   (wrap-text "<strong>" "</strong>"))
 (global-set-key (kbd "<f6>") 'wrap-strong)
 
+;; less-css-mode.el
+(require 'less-mode)
+
 ;; zencoding
 (require 'zencoding-mode)
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
