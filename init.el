@@ -45,11 +45,6 @@
 (windmove-default-keybindings 'meta)
 (setq windmove-wrap-around t)
 
-;; whenever an external process changes a file underneath emacs, and there
-;; was no unsaved changes in the corresponding buffer, just revert its
-;; content to reflect what's on-disk.
-(global-auto-revert-mode 1)
-
 ;; required by one of my snippets
 (require 'perl-mode)
 
