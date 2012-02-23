@@ -1,5 +1,9 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/yasnippet-0.6.1c/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-eclim/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-eclim/vendor"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/company-0.5"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete-1.3.1"))
 
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8-unix)
@@ -52,6 +56,26 @@
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/yasnippet-0.6.1c/snippets")
+
+;; Emacs-eclim
+(require 'eclim)
+(setq eclim-auto-save t)
+(global-eclim-mode)
+(setq eclim-eclipse-dirs '("D:/eclipse"))
+
+;; regular auto-complete initialization
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; add the emacs-eclim source
+(require 'ac-emacs-eclim-source)
+(add-hook 'eclim-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-emacs-eclim)))
+
+;; company
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
 
 ;; nXhtml-mode
 (load "~/.emacs.d/nxhtml/autostart")
