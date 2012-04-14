@@ -14,6 +14,8 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(c-basic-offset 2)
+ '(c-offsets-alist (quote ((func-decl-cont . ++) (arglist-intro . ++))))
  '(grep-highlight-matches (quote always))
  '(indent-tabs-mode nil)
  '(max-lisp-eval-depth 50000)
@@ -30,7 +32,10 @@
 (setq inhibit-splash-screen t)          ;; turn off splash screen
 (setq scroll-step 1)
 (setq c-default-style "bsd"
-      c-basic-offset 4)
+      c-basic-offset 2)
+;; (setq c-offsets-alist (quote ((func-decl-cont . ++))))
+
+(setq-default tab-width 2)
 (tool-bar-mode -1)
 (set-face-attribute 'default nil :height 90)
 (setq x-select-enable-clipboard t)      ;; better clipboard under X11
@@ -48,6 +53,10 @@
 ;; Navigate windows with M-<arrows>
 (windmove-default-keybindings 'meta)
 (setq windmove-wrap-around t)
+
+;; set browser
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome")
 
 ;; required by one of my snippets
 (require 'perl-mode)
@@ -80,10 +89,27 @@
 ;; nXhtml-mode
 (load "~/.emacs.d/nxhtml/autostart")
 
+;; php-mode
+(add-to-list 'auto-mode-alist '("\\.module\\'" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc\\'" . php-mode))
+
+(add-hook 'php-mode-hook
+      (function (lambda ()
+                  (setq indent-tabs-mode nil)
+                  (setq tab-width 2)
+                  (setq c-basic-offset 2))))
+
+;; java-mode
+(add-hook 'java-mode-hook
+          (lambda ()
+            "Treat Java 1.5 @-style annotations as comments."
+            (setq c-comment-start-regexp "(@|/(/|[*][*]?))")
+            (modify-syntax-entry ?@ "< b" java-mode-syntax-table)))
+
 ;; hg
 (require 'mercurial)
 
-;; switch vc-diff to unified diff 
+;; switch vc-diff to unified diff
 (setf vc-diff-switches "-u")
 
 ;; js2-mode - currently testing built-in javascript-mode
@@ -101,7 +127,7 @@
      (0 (put-text-property
          (match-beginning 0)
          (match-end 0)
-         'face (list :background 
+         'face (list :background
                      (match-string-no-properties 0)))))))
 (defun hexcolour-add-to-font-lock ()
   (font-lock-add-keywords nil hexcolour-keywords))
@@ -140,11 +166,18 @@
 (setq auto-mode-alist
    (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
+;; whitespace-mode
+(setq whitespace-line-column 1000)
+(setq newline-mark nil)
+;; make whitespace-mode use just basic coloring
+(setq whitespace-style (quote
+  (spaces tabs newline space-mark tab-mark newline-mark)))
+
 ;; remember password in tramp session
 (setq password-cache-expiry nil)
 
 ;; Better auto completion for buffer switching and command execution.
-;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match. 
+;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match.
 (require 'ido)
 (ido-mode 'buffer)
 (setq ido-enable-flex-matching t)
@@ -157,10 +190,10 @@
 (require 'mic-paren)
 (paren-activate)
 (setq paren-priority 'close)
- 
+
 ;; enter (RET) mapping
 (dolist (hook (list
-               'js2-mode-hook
+               ;;'js2-mode-hook
                'php-mode-hook
                'perl-mode-hook))
   (add-hook hook
