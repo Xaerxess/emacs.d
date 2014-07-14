@@ -1,13 +1,24 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/yasnippet-0.6.1c/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-eclim/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-eclim/vendor"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/company-0.5"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete-1.3.1"))
+
+(require 'package)
+
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+
+(setq package-enable-at-startup nil)
+(package-initialize)
+
+(setq package-list '(auto-complete ido markdown-mode mic-paren less-css-mode sql-indent yasnippet zencoding-mode))
+(or (file-exists-p package-user-dir)
+    (package-refresh-contents))
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 (prefer-coding-system 'utf-8)
-(setq coding-system-for-read 'utf-8-unix)
-(setq coding-system-for-write 'utf-8-unix)
+;(setq coding-system-for-read 'utf-8-unix)
+;(setq coding-system-for-write 'utf-8-unix)
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -61,30 +72,15 @@
 ;; required by one of my snippets
 (require 'perl-mode)
 
-;; YASnippet - http://code.google.com/p/yasnippet/
+;; YASnippet
 (require 'yasnippet)
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/yasnippet-0.6.1c/snippets")
-
-;; Emacs-eclim
-(require 'eclim)
-(setq eclim-auto-save t)
-(global-eclim-mode)
-(setq eclim-eclipse-dirs '("D:/eclipse"))
+(setq yas-snippet-dirs (append yas-snippet-dirs
+                               '("~/.emacs.d/yasnippets")))
+(yas-global-mode 1)
 
 ;; regular auto-complete initialization
 (require 'auto-complete-config)
 (ac-config-default)
-
-;; add the emacs-eclim source
-(require 'ac-emacs-eclim-source)
-(add-hook 'eclim-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-emacs-eclim)))
-
-;; company
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-(global-company-mode t)
 
 ;; nXhtml-mode
 (load "~/.emacs.d/nxhtml/autostart")
@@ -105,9 +101,6 @@
             "Treat Java 1.5 @-style annotations as comments."
             (setq c-comment-start-regexp "(@|/(/|[*][*]?))")
             (modify-syntax-entry ?@ "< b" java-mode-syntax-table)))
-
-;; hg
-(require 'mercurial)
 
 ;; switch vc-diff to unified diff
 (setf vc-diff-switches "-u")
@@ -154,20 +147,19 @@
 (global-set-key (kbd "<f6>") 'wrap-strong)
 
 ;; less-css-mode.el
-(require 'less-mode)
+(require 'less-css-mode)
 
 ;; zencoding
 (require 'zencoding-mode)
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 
 ;; markdown
-(autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
+(require 'markdown-mode)
 (setq auto-mode-alist
    (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
 ;; whitespace-mode
-(setq whitespace-line-column 1000)
+(setq whitespace-line-column 200)
 (setq newline-mark nil)
 ;; make whitespace-mode use just basic coloring
 (setq whitespace-style (quote
