@@ -9,22 +9,27 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-(setq package-list '(auto-complete ido markdown-mode mic-paren less-css-mode sql-indent yasnippet zencoding-mode))
+(setq package-list '(auto-complete ergoemacs-mode ido markdown-mode mic-paren less-css-mode sql-indent yasnippet zencoding-mode))
 (or (file-exists-p package-user-dir)
     (package-refresh-contents))
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
 
+(setq ergoemacs-theme nil)
+(setq ergoemacs-keyboard-layout "us")
+(require 'ergoemacs-mode)
+(ergoemacs-mode 1)
+
 (prefer-coding-system 'utf-8)
 ;(setq coding-system-for-read 'utf-8-unix)
 ;(setq coding-system-for-write 'utf-8-unix)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(c-basic-offset 2)
  '(c-offsets-alist (quote ((func-decl-cont . ++) (arglist-intro . ++))))
  '(grep-highlight-matches (quote always))
@@ -33,10 +38,10 @@
  '(max-specpdl-size 50000)
  '(safe-local-variable-values (quote ((buffer-file-coding-system . utf-8-auto) (buffer-file-coding-system . utf-8-dos) (buffer-file-coding-system . windows-1250-unix) (buffer-file-coding-system . utf-8-unix)))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(diff-added ((t (:foreground "DodgerBlue" :bold t))))
  '(diff-removed ((t (:foreground "FireBrick" :bold t)))))
 
@@ -57,9 +62,6 @@
 (setq hscroll-step   4)
 (global-set-key (kbd "C-<") (function (lambda () (interactive) (scroll-left 4))))
 (global-set-key (kbd "C->") (function (lambda () (interactive) (scroll-right 4))))
-
-;; CUA mode: C-c, C-v etc.
-(cua-mode t)
 
 ;; Navigate windows with M-<arrows>
 (windmove-default-keybindings 'meta)
