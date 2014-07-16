@@ -5,6 +5,11 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/company-0.5"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete-1.3.1"))
 
+(require 'server)
+(if (and (eq system-type 'windows-nt)
+         (not (server-running-p server-name)))
+    (server-start))
+
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8-unix)
 (setq coding-system-for-write 'utf-8-unix)
@@ -20,7 +25,8 @@
  '(indent-tabs-mode nil)
  '(max-lisp-eval-depth 50000)
  '(max-specpdl-size 50000)
- '(safe-local-variable-values (quote ((buffer-file-coding-system . utf-8-auto) (buffer-file-coding-system . utf-8-dos) (buffer-file-coding-system . windows-1250-unix) (buffer-file-coding-system . utf-8-unix)))))
+ '(safe-local-variable-values (quote ((buffer-file-coding-system . cp1250-unix) (buffer-file-coding-system . utf-8-auto) (buffer-file-coding-system . utf-8-dos) (buffer-file-coding-system . windows-1250-unix) (buffer-file-coding-system . utf-8-unix))))
+ '(uniquify-buffer-name-style (quote post-forward-angle-brackets) nil (uniquify)))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -57,6 +63,8 @@
 ;; set browser
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "google-chrome")
+(if (eq system-type 'windows-nt)
+    (setq browse-url-browser-function 'browse-url-default-windows-browser))
 
 ;; required by one of my snippets
 (require 'perl-mode)
@@ -171,10 +179,14 @@
 (setq newline-mark nil)
 ;; make whitespace-mode use just basic coloring
 (setq whitespace-style (quote
-  (spaces tabs newline space-mark tab-mark newline-mark)))
+  (lines-tail spaces tabs newline space-mark tab-mark newline-mark)))
 
 ;; remember password in tramp session
 (setq password-cache-expiry nil)
+(if (eq system-type 'windows-nt)
+    (progn
+      (require 'tramp)
+      (set-default 'tramp-default-method "plink")))
 
 ;; Better auto completion for buffer switching and command execution.
 ;; ido-enable-flex-matching means that if the entered string does not match any buffer name, any buffer name containing the entered characters in the given sequence will match.
@@ -230,8 +242,9 @@
                                "htdocs/*.html"
                                "htdocs/css/*.css"
                                "htdocs/scripts/*.js"
+                               "scripts/*.js"
                                "modules/*.pm"
-                               "tools/*.*")
+                               "LexisNexisLibs/*.pm")
                              " ")))))
 (global-set-key (kbd "C-M-g") 'do-grep)
 
@@ -297,3 +310,14 @@ by using nxml's indentation rules."
 	  (select-window first-win)
 	  (if this-win-2nd (other-window 1))))))
 (global-set-key (kbd "C-x 4") 'toggle-window-split)
+
+(defun increment-number-at-point ()
+  (interactive)
+  (skip-chars-backward "0123456789")
+  (or (looking-at "[0123456789]+")
+      (error "No number at point"))
+  (replace-match (number-to-string (1+ (string-to-number (match-string 0))))))
+
+(global-set-key [f11] 'increment-number-at-point)
+
+(require 'uniquify)
