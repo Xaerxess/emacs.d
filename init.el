@@ -16,6 +16,7 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
+(setq-default tab-width 4)
 (custom-set-variables
  '(blink-cursor-mode -1)
  '(cua-mode t nil (cua-base))
