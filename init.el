@@ -12,6 +12,16 @@
       (add-to-list 'load-path org-lisp-dir)
       (require 'org))))
 
+;; customization
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(custom-set-variables
+ '(blink-cursor-mode -1)
+ '(cua-mode t nil (cua-base))
+ '(show-paren-mode t)
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
 ;; load the starter kit from the `after-init-hook' so all packages are loaded
 (add-hook 'after-init-hook
  `(lambda ()
